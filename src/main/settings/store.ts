@@ -1,32 +1,34 @@
-import { DEFAULT_PLUCK_TEXT_SHORTCUT } from '../constants/shortcuts';
+import type { StoredSettings } from '../../shared/settings';
 import { readJsonFile, writeJsonFile } from '../lib/json-file';
+import { parseSettings } from './parse-settings';
 
 const SETTINGS_FILE = 'settings.json';
 
-type StoredSettings = {
-  keepLineBreaks: boolean;
-  pluckTextShortcut: string;
-};
+type SettingsListener = (settings: StoredSettings, previous: StoredSettings) => void;
 
-export type AppSettings = StoredSettings & {
-  launchAtLogin: boolean;
-};
-
-const DEFAULT_SETTINGS: StoredSettings = {
-  keepLineBreaks: true,
-  pluckTextShortcut: DEFAULT_PLUCK_TEXT_SHORTCUT,
-};
+const listeners = new Set<SettingsListener>();
 
 let settings: StoredSettings | null = null;
 
 export function getSettings() {
-  settings ??= readJsonFile(SETTINGS_FILE, DEFAULT_SETTINGS);
+  settings ??= parseSettings(readJsonFile(SETTINGS_FILE));
 
   return settings;
 }
 
 export function updateSettings(patch: Partial<StoredSettings>) {
-  settings = { ...getSettings(), ...patch };
+  const previous = getSettings();
 
+  settings = { ...previous, ...patch };
   writeJsonFile(SETTINGS_FILE, settings);
+
+  for (const listener of listeners) listener(settings, previous);
+}
+
+export function onSettingsChange(listener: SettingsListener) {
+  listeners.add(listener);
+
+  return () => {
+    listeners.delete(listener);
+  };
 }

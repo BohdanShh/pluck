@@ -1,17 +1,17 @@
 import { app, globalShortcut } from 'electron';
 
+import { setupAboutPanel } from './about-panel';
 import { setupSettingsHandlers } from './settings/ipc';
-import { registerPluckTextShortcut } from './shortcut';
+import { registerShortcut } from './shortcut';
 import { createTray } from './tray/tray';
-import { setupAboutWindow } from './windows/about-window';
 
 if (!app.requestSingleInstanceLock()) app.exit();
 
 app.on('ready', () => {
   createTray();
-  setupAboutWindow();
+  setupAboutPanel();
   setupSettingsHandlers();
-  registerPluckTextShortcut();
+  registerShortcut();
 });
 
 app.on('window-all-closed', () => {});

@@ -1,7 +1,8 @@
-import path from 'node:path';
-
 import { app, BrowserWindow } from 'electron';
 import type { ProgressInfo } from 'electron-updater';
+
+import { IpcChannel } from '../../shared/ipc';
+import { loadRenderer, PRELOAD_PATH } from './load-renderer';
 
 let updateWindow: BrowserWindow | null = null;
 
@@ -19,7 +20,7 @@ export function openUpdateWindow(onCancel: () => void) {
     fullscreenable: false,
     vibrancy: 'window',
     webPreferences: {
-      preload: path.join(import.meta.dirname, 'preload.cjs'),
+      preload: PRELOAD_PATH,
     },
   });
 
@@ -36,17 +37,11 @@ export function openUpdateWindow(onCancel: () => void) {
     updateWindow = null;
   });
 
-  if (process.env.VITE_DEV_SERVER_URL) {
-    updateWindow.loadURL(`${process.env.VITE_DEV_SERVER_URL}src/renderer/index.html?window=update`);
-  } else {
-    updateWindow.loadFile(path.join(import.meta.dirname, '../dist/src/renderer/index.html'), {
-      query: { window: 'update' },
-    });
-  }
+  loadRenderer(updateWindow, 'update');
 }
 
 export function sendUpdateProgress({ percent }: ProgressInfo) {
-  updateWindow?.webContents.send('updater:progress', Math.floor(percent));
+  updateWindow?.webContents.send(IpcChannel.updateProgress, Math.floor(percent));
 }
 
 export function closeUpdateWindow() {

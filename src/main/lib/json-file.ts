@@ -7,11 +7,11 @@ function filePath(name: string) {
   return path.join(app.getPath('userData'), name);
 }
 
-export function readJsonFile<T extends object>(name: string, defaults: T): T {
+export function readJsonFile(name: string): unknown {
   try {
-    return { ...defaults, ...JSON.parse(fs.readFileSync(filePath(name), 'utf8')) };
+    return JSON.parse(fs.readFileSync(filePath(name), 'utf8'));
   } catch {
-    return { ...defaults };
+    return null;
   }
 }
 

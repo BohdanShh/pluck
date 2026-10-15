@@ -1,29 +1,28 @@
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron';
 
-import type { AppSettings } from './main/settings/store';
+import { IpcChannel } from './shared/ipc';
+import type { AppSettings } from './shared/settings';
 
 const settings = {
-  get: (): Promise<AppSettings> => ipcRenderer.invoke('settings:get'),
-  setKeepLineBreaks: (keep: boolean): Promise<void> =>
-    ipcRenderer.invoke('settings:set-keep-line-breaks', keep),
-  setPluckTextShortcut: (accelerator: string): Promise<string | null> =>
-    ipcRenderer.invoke('settings:set-pluck-text-shortcut', accelerator),
-  pausePluckTextShortcut: (): Promise<void> =>
-    ipcRenderer.invoke('settings:pause-pluck-text-shortcut'),
-  resumePluckTextShortcut: (): Promise<void> =>
-    ipcRenderer.invoke('settings:resume-pluck-text-shortcut'),
+  get: (): Promise<AppSettings> => ipcRenderer.invoke(IpcChannel.getSettings),
+  setKeepLineBreaks: (keep: boolean): Promise<boolean> =>
+    ipcRenderer.invoke(IpcChannel.setKeepLineBreaks, keep),
+  setShortcut: (accelerator: string): Promise<string | null> =>
+    ipcRenderer.invoke(IpcChannel.setShortcut, accelerator),
+  pauseShortcut: (): Promise<void> => ipcRenderer.invoke(IpcChannel.pauseShortcut),
+  resumeShortcut: (): Promise<void> => ipcRenderer.invoke(IpcChannel.resumeShortcut),
   setLaunchAtLogin: (launch: boolean): Promise<boolean> =>
-    ipcRenderer.invoke('settings:set-launch-at-login', launch),
+    ipcRenderer.invoke(IpcChannel.setLaunchAtLogin, launch),
 };
 
 const updater = {
   onProgress: (callback: (percent: number) => void) => {
     const listener = (_event: IpcRendererEvent, percent: number) => callback(percent);
 
-    ipcRenderer.on('updater:progress', listener);
+    ipcRenderer.on(IpcChannel.updateProgress, listener);
 
     return () => {
-      ipcRenderer.off('updater:progress', listener);
+      ipcRenderer.off(IpcChannel.updateProgress, listener);
     };
   },
 };

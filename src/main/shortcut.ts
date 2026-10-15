@@ -1,20 +1,8 @@
-import { globalShortcut } from 'electron';
+import { globalShortcut, type WebContents } from 'electron';
 
+import { validateShortcut } from './lib/validate-shortcut';
+import { pluckText } from './pluck-text';
 import { getSettings, updateSettings } from './settings/store';
-import { pluckText, updateMenu } from './tray/tray';
-
-const FUNCTION_KEY = /^F([1-9]|1\d|2[0-4])$/;
-
-function validateShortcut(accelerator: string) {
-  const parts = accelerator.split('+');
-
-  if (FUNCTION_KEY.test(parts.at(-1) ?? '')) return null;
-  if (!['Control', 'Alt', 'Command'].some(modifier => parts.includes(modifier))) {
-    return 'Use ⌘, ⌃ or ⌥ in the shortcut';
-  }
-
-  return null;
-}
 
 function register(accelerator: string) {
   try {
@@ -24,7 +12,7 @@ function register(accelerator: string) {
   }
 }
 
-export function registerPluckTextShortcut() {
+export function registerShortcut() {
   const { pluckTextShortcut } = getSettings();
 
   if (globalShortcut.isRegistered(pluckTextShortcut)) return;
@@ -34,11 +22,7 @@ export function registerPluckTextShortcut() {
   }
 }
 
-export function unregisterPluckTextShortcut() {
-  globalShortcut.unregister(getSettings().pluckTextShortcut);
-}
-
-export function changePluckTextShortcut(accelerator: string) {
+export function changeShortcut(accelerator: string) {
   const error = validateShortcut(accelerator);
 
   if (error) return error;
@@ -50,7 +34,16 @@ export function changePluckTextShortcut(accelerator: string) {
 
   globalShortcut.unregister(pluckTextShortcut);
   updateSettings({ pluckTextShortcut: accelerator });
-  updateMenu();
 
   return null;
+}
+
+export function pauseShortcut(sender: WebContents) {
+  globalShortcut.unregister(getSettings().pluckTextShortcut);
+  sender.once('destroyed', registerShortcut);
+}
+
+export function resumeShortcut(sender: WebContents) {
+  sender.off('destroyed', registerShortcut);
+  registerShortcut();
 }

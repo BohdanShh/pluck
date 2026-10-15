@@ -1,13 +1,8 @@
-import { rm } from 'node:fs/promises';
+import { Tray } from 'electron';
 
-import { clipboard, Tray } from 'electron';
-
-import { captureScreen } from '../lib/capture-screen';
-import { playSound } from '../lib/play-sound';
-import { recognizeText } from '../lib/recognize-text';
-import { getSettings } from '../settings/store';
-import { checkForUpdates } from '../updater';
-import { openAboutWindow } from '../windows/about-window';
+import { openAboutPanel } from '../about-panel';
+import { pluckText } from '../pluck-text';
+import { getSettings, onSettingsChange } from '../settings/store';
 import { openSettingsWindow } from '../windows/settings-window';
 import { buildMenu } from './menu';
 import { createTrayIcon } from './tray-icon';
@@ -15,40 +10,19 @@ import { createTrayIcon } from './tray-icon';
 // Kept in a variable so the garbage collector doesn't remove the icon
 let tray: Tray;
 
-let isPlucking = false;
+async function checkForUpdates() {
+  const updater = await import('../updater');
 
-export async function pluckText() {
-  if (isPlucking) return;
-
-  isPlucking = true;
-
-  try {
-    const imagePath = await captureScreen();
-
-    if (!imagePath) return;
-
-    const text = await recognizeText(imagePath);
-    await rm(imagePath, { force: true });
-
-    if (!text) {
-      playSound('failure');
-      return;
-    }
-
-    clipboard.writeText(getSettings().keepLineBreaks ? text : text.replace(/\s*\n\s*/g, ' '));
-    playSound('success');
-  } finally {
-    isPlucking = false;
-  }
+  await updater.checkForUpdates();
 }
 
-export function updateMenu() {
+function updateMenu() {
   tray.setContextMenu(
     buildMenu({
       shortcut: getSettings().pluckTextShortcut,
       onPluckText: pluckText,
       onOpenSettings: openSettingsWindow,
-      onOpenAbout: openAboutWindow,
+      onOpenAbout: openAboutPanel,
       onCheckForUpdates: checkForUpdates,
     })
   );
@@ -57,4 +31,8 @@ export function updateMenu() {
 export function createTray() {
   tray = new Tray(createTrayIcon());
   updateMenu();
+
+  onSettingsChange((settings, previous) => {
+    if (settings.pluckTextShortcut !== previous.pluckTextShortcut) updateMenu();
+  });
 }

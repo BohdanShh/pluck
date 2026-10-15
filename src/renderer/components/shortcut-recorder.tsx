@@ -16,14 +16,14 @@ export function ShortcutRecorder({ value, onChange }: ShortcutRecorderProps) {
     if (isRecording) return;
 
     setIsRecording(true);
-    window.settings.pausePluckTextShortcut();
+    window.settings.pauseShortcut();
   };
 
   const stopRecording = () => {
     if (!isRecording) return;
 
     setIsRecording(false);
-    window.settings.resumePluckTextShortcut();
+    window.settings.resumeShortcut();
   };
 
   const recordShortcut = async (event: KeyboardEvent<HTMLButtonElement>) => {
@@ -42,7 +42,7 @@ export function ShortcutRecorder({ value, onChange }: ShortcutRecorderProps) {
 
     setIsRecording(false);
     await onChange(accelerator);
-    window.settings.resumePluckTextShortcut();
+    window.settings.resumeShortcut();
   };
 
   return (

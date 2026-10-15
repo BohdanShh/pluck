@@ -8,7 +8,7 @@ function copyrightYears() {
   return currentYear > FIRST_YEAR ? `${FIRST_YEAR}–${currentYear}` : `${FIRST_YEAR}`;
 }
 
-export function setupAboutWindow() {
+export function setupAboutPanel() {
   app.setAboutPanelOptions({
     applicationName: 'Pluck',
     applicationVersion: app.getVersion(),
@@ -17,7 +17,7 @@ export function setupAboutWindow() {
   });
 }
 
-export function openAboutWindow() {
+export function openAboutPanel() {
   app.focus({ steal: true });
   setImmediate(() => app.showAboutPanel());
 }

@@ -15,25 +15,35 @@ export function Settings() {
   const [launchAtLogin, setLaunchAtLogin] = useState(initialSettings.launchAtLogin);
 
   const changeShortcut = async (accelerator: string) => {
-    const error = await window.settings.setPluckTextShortcut(accelerator);
+    const error = await window.settings.setShortcut(accelerator);
 
     setShortcutError(error);
 
     if (!error) setShortcut(accelerator);
   };
 
-  const changeKeepLineBreaks = (event: ChangeEvent<HTMLInputElement>) => {
+  const changeKeepLineBreaks = async (event: ChangeEvent<HTMLInputElement>) => {
     const keep = event.target.checked;
 
     setKeepLineBreaks(keep);
-    window.settings.setKeepLineBreaks(keep);
+
+    try {
+      setKeepLineBreaks(await window.settings.setKeepLineBreaks(keep));
+    } catch {
+      setKeepLineBreaks(!keep);
+    }
   };
 
   const changeLaunchAtLogin = async (event: ChangeEvent<HTMLInputElement>) => {
     const launch = event.target.checked;
 
     setLaunchAtLogin(launch);
-    setLaunchAtLogin(await window.settings.setLaunchAtLogin(launch));
+
+    try {
+      setLaunchAtLogin(await window.settings.setLaunchAtLogin(launch));
+    } catch {
+      setLaunchAtLogin(!launch);
+    }
   };
 
   return (
