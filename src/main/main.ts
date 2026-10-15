@@ -1,33 +1,7 @@
-import path from 'node:path';
+import { app } from 'electron';
 
-import { app, BrowserWindow } from 'electron';
+import { createTray } from './tray';
 
-function createMainWindow() {
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    show: false,
-    title: 'Pluck',
-    webPreferences: {
-      preload: path.join(import.meta.dirname, 'preload.cjs'),
-    },
-  });
+await app.whenReady();
 
-  mainWindow.once('ready-to-show', () => mainWindow.show());
-
-  if (process.env.VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(`${process.env.VITE_DEV_SERVER_URL}src/renderer/index.html`);
-  } else {
-    mainWindow.loadFile(path.join(import.meta.dirname, '../dist/src/renderer/index.html'));
-  }
-}
-
-app.whenReady().then(() => {
-  createMainWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createMainWindow();
-    }
-  });
-});
+createTray();

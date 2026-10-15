@@ -14,8 +14,9 @@
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "rm -rf dist dist-electron && vite build",
+    "dev": "bun run build:recognize-text && vite",
+    "build": "rm -rf dist dist-electron && bun run build:recognize-text && vite build",
+    "build:recognize-text": "mkdir -p dist-electron && swiftc -O native/recognize-text.swift -o dist-electron/recognize-text",
     "start": "electron .",
     "format": "prettier . --write",
     "dist": "rm -rf release && bun run build && electron-builder"
