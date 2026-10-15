@@ -1,8 +1,8 @@
 {
   "name": "pluck",
   "productName": "Pluck",
-  "version": "0.1.0",
-  "description": "",
+  "version": "1.0.0",
+  "description": "A macOS utility for copying text from anywhere on your screen.",
   "author": {
     "name": "Bohdan Shemyhon",
     "email": "bohdanshh.dev@gmail.com"

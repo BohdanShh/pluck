@@ -1,7 +1,8 @@
 import { rm } from 'node:fs/promises';
 
-import { clipboard, Menu, Tray } from 'electron';
+import { clipboard, Menu, nativeImage, Tray } from 'electron';
 
+import { openAbout } from './about';
 import { PLUCK_TEXT_SHORTCUT } from './constants';
 import { captureScreen } from './lib/capture-screen';
 import { playSound } from './lib/play-sound';
@@ -52,6 +53,7 @@ export function createTray() {
         click: ({ checked }) => updateSettings({ keepLineBreaks: checked }),
       },
       { type: 'separator' },
+      { label: 'About', icon: nativeImage.createMenuSymbol('info.circle'), click: openAbout },
       { label: 'Quit Pluck', role: 'quit' },
     ])
   );
