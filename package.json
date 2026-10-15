@@ -19,7 +19,7 @@
     "build:recognize-text": "mkdir -p dist-electron && swiftc -O native/recognize-text.swift -o dist-electron/recognize-text",
     "start": "electron .",
     "format": "prettier . --write",
-    "dist": "rm -rf release && bun run build && electron-builder"
+    "dist": "export APPLE_KEYCHAIN_PROFILE=${APPLE_KEYCHAIN_PROFILE:-pluck} && rm -rf release && bun run build && electron-builder && sh scripts/notarize-dmg.sh"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
