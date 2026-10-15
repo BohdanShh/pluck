@@ -1,7 +1,7 @@
-import type { Api } from '../preload';
+import type { SettingsApi } from '../preload';
 
 declare global {
   interface Window {
-    api: Api;
+    settings: SettingsApi;
   }
 }

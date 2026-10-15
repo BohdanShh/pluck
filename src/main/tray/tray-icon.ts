@@ -1,7 +1,7 @@
 import { nativeImage } from 'electron';
 
-import trayIconUrl from './assets/trayTemplate.png?inline';
-import trayIconUrl2x from './assets/trayTemplate@2x.png?inline';
+import trayIconUrl from '../assets/trayTemplate.png?inline';
+import trayIconUrl2x from '../assets/trayTemplate@2x.png?inline';
 
 export function createTrayIcon() {
   const icon = nativeImage.createFromDataURL(trayIconUrl);
