@@ -1,16 +1,19 @@
 import { rm } from 'node:fs/promises';
 
-import { clipboard, Menu, nativeImage, Tray } from 'electron';
+import { clipboard, Menu, Tray } from 'electron';
 
+import { PLUCK_TEXT_SHORTCUT } from './constants';
 import { captureScreen } from './lib/capture-screen';
+import { playSound } from './lib/play-sound';
 import { recognizeText } from './lib/recognize-text';
+import { createTrayIcon } from './tray-icon';
 
 // Kept in a variable so the garbage collector doesn't remove the icon
 let tray: Tray;
 
 let isPlucking = false;
 
-async function pluckText() {
+export async function pluckText() {
   if (isPlucking) return;
 
   isPlucking = true;
@@ -23,19 +26,24 @@ async function pluckText() {
     const text = await recognizeText(imagePath);
     rm(imagePath, { force: true });
 
-    if (text) clipboard.writeText(text);
+    if (!text) {
+      playSound('failure');
+      return;
+    }
+
+    clipboard.writeText(text);
+    playSound('success');
   } finally {
     isPlucking = false;
   }
 }
 
 export function createTray() {
-  tray = new Tray(nativeImage.createEmpty());
+  tray = new Tray(createTrayIcon());
 
-  tray.setTitle('Pluck');
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: 'Pluck Text', click: pluckText },
+      { label: 'Pluck Text', accelerator: PLUCK_TEXT_SHORTCUT, click: pluckText },
       { type: 'separator' },
       { label: 'Quit Pluck', role: 'quit' },
     ])

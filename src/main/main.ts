@@ -1,7 +1,11 @@
-import { app } from 'electron';
+import { app, globalShortcut } from 'electron';
 
+import { registerPluckTextShortcut } from './shortcut';
 import { createTray } from './tray';
 
-await app.whenReady();
+app.on('ready', () => {
+  createTray();
+  registerPluckTextShortcut();
+});
 
-createTray();
+app.on('will-quit', () => globalShortcut.unregisterAll());
