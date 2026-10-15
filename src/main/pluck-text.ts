@@ -6,6 +6,10 @@ import { captureScreen } from './lib/capture-screen';
 import { joinLines } from './lib/join-lines';
 import { playSound } from './lib/play-sound';
 import { recognizeText } from './lib/recognize-text';
+import {
+  hasScreenRecordingAccess,
+  requestScreenRecordingAccess,
+} from './lib/screen-recording-access';
 import { getSettings } from './settings/store';
 
 let isPlucking = false;
@@ -16,6 +20,11 @@ export async function pluckText() {
   isPlucking = true;
 
   try {
+    if (!hasScreenRecordingAccess()) {
+      await requestScreenRecordingAccess();
+      return;
+    }
+
     const imagePath = await captureScreen();
 
     if (!imagePath) return;
