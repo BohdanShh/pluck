@@ -2,6 +2,8 @@
 
 A tiny menu bar utility for macOS that copies text from anywhere on your screen. Select an area with a shortcut and its text is instantly copied to your clipboard.
 
+https://github.com/user-attachments/assets/31a9c210-b923-4e0f-bdfb-4cbb864b2e9d
+
 ## Features
 
 - **Copy text from anywhere** — press <kbd>⇧</kbd> <kbd>⌘</kbd> <kbd>T</kbd> (configurable), select an area and its text lands in your clipboard
