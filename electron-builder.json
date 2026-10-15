@@ -9,6 +9,7 @@
   "mac": {
     "target": ["dmg", "zip"],
     "category": "public.app-category.utilities",
+    "icon": "build/Pluck.icon",
     "extendInfo": {
       "LSUIElement": true
     },
