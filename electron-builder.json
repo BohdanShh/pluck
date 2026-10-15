@@ -1,0 +1,33 @@
+{
+  "appId": "io.github.bohdanshh.pluck",
+  "productName": "Pluck",
+  "directories": {
+    "output": "release"
+  },
+  "files": ["dist/**/*", "dist-electron/**/*"],
+  "mac": {
+    "target": ["dmg", "zip"],
+    "category": "public.app-category.utilities",
+    "extendInfo": {
+      "LSUIElement": true
+    },
+    "identity": "Bohdan Shemyhon (344GWLF8QX)"
+  },
+  "dmg": {
+    "title": "Pluck",
+    "iconSize": 112,
+    "contents": [
+      {
+        "x": 120,
+        "y": 168,
+        "type": "file"
+      },
+      {
+        "x": 420,
+        "y": 168,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ]
+  }
+}

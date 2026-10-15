@@ -1,0 +1,14 @@
+# macOS system files
+.DS_Store
+
+# VS Code settings
+.vscode
+
+# Build and output directories
+out
+dist
+dist-electron
+release
+
+# Node.js dependencies
+node_modules
