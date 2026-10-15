@@ -1,1 +1,1 @@
-export const PLUCK_TEXT_SHORTCUT = 'Control+Alt+T';
+export const PLUCK_TEXT_SHORTCUT = 'Shift+Command+T';
