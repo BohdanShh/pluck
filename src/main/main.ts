@@ -5,6 +5,8 @@ import { registerPluckTextShortcut } from './shortcut';
 import { createTray } from './tray/tray';
 import { setupAboutWindow } from './windows/about-window';
 
+if (!app.requestSingleInstanceLock()) app.exit();
+
 app.on('ready', () => {
   createTray();
   setupAboutWindow();
