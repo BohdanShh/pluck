@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron';
 
 import type { AppSettings } from './main/settings/store';
 
@@ -16,6 +16,20 @@ const settings = {
     ipcRenderer.invoke('settings:set-launch-at-login', launch),
 };
 
+const updater = {
+  onProgress: (callback: (percent: number) => void) => {
+    const listener = (_event: IpcRendererEvent, percent: number) => callback(percent);
+
+    ipcRenderer.on('updater:progress', listener);
+
+    return () => {
+      ipcRenderer.off('updater:progress', listener);
+    };
+  },
+};
+
 contextBridge.exposeInMainWorld('settings', settings);
+contextBridge.exposeInMainWorld('updater', updater);
 
 export type SettingsApi = typeof settings;
+export type UpdaterApi = typeof updater;

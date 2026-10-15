@@ -30,5 +30,10 @@
         "path": "/Applications"
       }
     ]
+  },
+  "publish": {
+    "provider": "github",
+    "owner": "BohdanShh",
+    "repo": "pluck"
   }
 }

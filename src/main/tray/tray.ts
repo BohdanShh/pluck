@@ -6,6 +6,7 @@ import { captureScreen } from '../lib/capture-screen';
 import { playSound } from '../lib/play-sound';
 import { recognizeText } from '../lib/recognize-text';
 import { getSettings } from '../settings/store';
+import { checkForUpdates } from '../updater';
 import { openAboutWindow } from '../windows/about-window';
 import { openSettingsWindow } from '../windows/settings-window';
 import { buildMenu } from './menu';
@@ -48,6 +49,7 @@ export function updateMenu() {
       onPluckText: pluckText,
       onOpenSettings: openSettingsWindow,
       onOpenAbout: openAboutWindow,
+      onCheckForUpdates: checkForUpdates,
     })
   );
 }
