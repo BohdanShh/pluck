@@ -38,6 +38,7 @@ bun run dev
 | `bun run start`  | Run the built app                                     |
 | `bun run dist`   | Package a signed and notarized `.dmg` into `release/` |
 | `bun run format` | Format the code with Prettier                         |
+| `bun run lint`   | Lint the code with Oxlint                             |
 
 ### Packaging
 

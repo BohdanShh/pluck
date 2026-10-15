@@ -19,6 +19,7 @@
     "build:recognize-text": "mkdir -p dist-electron && swiftc -O native/recognize-text.swift -o dist-electron/recognize-text",
     "start": "electron .",
     "format": "prettier . --write",
+    "lint": "oxlint",
     "dist": "export APPLE_KEYCHAIN_PROFILE=${APPLE_KEYCHAIN_PROFILE:-pluck} && rm -rf release && bun run build && electron-builder && sh scripts/notarize-dmg.sh"
   },
   "devDependencies": {
@@ -31,6 +32,7 @@
     "electron": "^44.7.2",
     "electron-builder": "^26.15.3",
     "electron-updater": "^6.8.9",
+    "oxlint": "^1.88.0",
     "prettier": "^3.9.10",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
