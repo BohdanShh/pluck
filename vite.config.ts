@@ -12,6 +12,20 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    {
+      name: 'content-security-policy',
+      apply: 'build',
+      transformIndexHtml: () => [
+        {
+          tag: 'meta',
+          attrs: {
+            'http-equiv': 'Content-Security-Policy',
+            content: "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:",
+          },
+          injectTo: 'head-prepend',
+        },
+      ],
+    },
     tailwindcss(),
     electron({
       main: { entry: 'src/main/main.ts' },
