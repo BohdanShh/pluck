@@ -14,9 +14,9 @@
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
-    "dev": "bun run build:recognize-text && vite",
-    "build": "rm -rf dist dist-electron && bun run build:recognize-text && vite build",
-    "build:recognize-text": "mkdir -p dist-electron && swiftc -O native/recognize-text.swift -o dist-electron/recognize-text",
+    "dev": "bun run build:recognize-image && vite",
+    "build": "rm -rf dist dist-electron && bun run build:recognize-image && vite build",
+    "build:recognize-image": "mkdir -p dist-electron && swiftc -O native/recognize-image.swift -o dist-electron/recognize-image",
     "start": "electron .",
     "format": "prettier . --write",
     "lint": "oxlint",

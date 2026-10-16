@@ -6,8 +6,8 @@ import { logError } from '../lib/log';
 
 const execFileAsync = promisify(execFile);
 
-const RECOGNIZE_TEXT_PATH = path
-  .join(import.meta.dirname, 'recognize-text')
+const RECOGNIZE_IMAGE_PATH = path
+  .join(import.meta.dirname, 'recognize-image')
   .replace('app.asar', 'app.asar.unpacked');
 
 export type Recognition = {
@@ -23,9 +23,9 @@ function isRecognition(value: unknown): value is Recognition {
   return (kind === 'text' || kind === 'barcode') && typeof text === 'string';
 }
 
-export async function recognizeText(imagePath: string): Promise<Recognition | null> {
+export async function recognizeImage(imagePath: string): Promise<Recognition | null> {
   try {
-    const { stdout } = await execFileAsync(RECOGNIZE_TEXT_PATH, [imagePath]);
+    const { stdout } = await execFileAsync(RECOGNIZE_IMAGE_PATH, [imagePath]);
     const result: unknown = JSON.parse(stdout);
 
     if (!isRecognition(result)) throw new Error(`Unexpected output: ${stdout}`);
@@ -34,7 +34,7 @@ export async function recognizeText(imagePath: string): Promise<Recognition | nu
 
     return text ? { kind: result.kind, text } : null;
   } catch (error) {
-    logError('Failed to recognize text', error);
+    logError('Failed to recognize the image', error);
 
     return null;
   }

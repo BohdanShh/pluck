@@ -1,7 +1,7 @@
 import { globalShortcut, type WebContents } from 'electron';
 
 import { validateShortcut } from './lib/validate-shortcut';
-import { pluckText } from './pluck-text';
+import { pluckText } from './pluck';
 import { getSettings, updateSettings } from './settings/store';
 
 function register(accelerator: string) {

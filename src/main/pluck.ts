@@ -9,7 +9,7 @@ import { getSettings } from './settings/store';
 import { captureScreen } from './system/capture-screen';
 import { saveClipboardImage } from './system/clipboard-image';
 import { playSound } from './system/play-sound';
-import { recognizeText } from './system/recognize-text';
+import { recognizeImage } from './system/recognize-image';
 import { hasScreenRecordingAccess, openScreenRecordingSettings } from './system/screen-recording';
 
 let isPlucking = false;
@@ -32,7 +32,7 @@ async function withPluckGuard(pluck: () => Promise<void>) {
 
 // Recognizes the image, deletes it and copies the result.
 async function copyRecognizedText(imagePath: string) {
-  const recognition = await recognizeText(imagePath);
+  const recognition = await recognizeImage(imagePath);
   await rm(imagePath, { force: true });
 
   if (!recognition) {

@@ -5,7 +5,7 @@
     "output": "release"
   },
   "files": ["dist/**/*", "dist-electron/**/*"],
-  "asarUnpack": ["dist-electron/recognize-text"],
+  "asarUnpack": ["dist-electron/recognize-image"],
   "mac": {
     "target": ["dmg", "zip"],
     "category": "public.app-category.utilities",

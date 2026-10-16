@@ -1,7 +1,7 @@
 import { Tray } from 'electron';
 
 import { openAboutPanel } from '../dialogs/about-panel';
-import { pluckClipboardImage, pluckText } from '../pluck-text';
+import { pluckClipboardImage, pluckText } from '../pluck';
 import { getSettings, onSettingsChange } from '../settings/store';
 import { openSettingsWindow } from '../windows/settings-window';
 import { buildMenu } from './menu';

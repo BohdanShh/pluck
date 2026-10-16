@@ -18,7 +18,7 @@ func fail(_ message: String, code: Int32 = 1) -> Never {
 }
 
 guard CommandLine.arguments.count == 2 else {
-    fail("Usage: recognize-text <image-path>", code: 2)
+    fail("Usage: recognize-image <image-path>", code: 2)
 }
 
 let imageURL = URL(fileURLWithPath: CommandLine.arguments[1])
