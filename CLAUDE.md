@@ -10,13 +10,13 @@ Pluck is a macOS-only (Apple silicon, macOS 13+) menu bar Electron app: a global
 
 Uses Bun. Building requires Xcode (`swiftc`) because the OCR helper is a Swift binary.
 
-- `bun run dev` — compile the Swift helper, then start Vite + Electron with hot reload
+- `bun run dev` — compile the Swift helper, then start Vite + Electron with hot reload. The helper is compiled only once at startup; after editing `native/recognize-text.swift`, run `bun run build:recognize-text` (or restart dev).
 - `bun run build` — clean `dist`/`dist-electron`, compile the Swift helper, build renderer, main and preload
 - `bun run start` — run the built app (`electron .`)
 - `bun run lint` — Oxlint (correctness = error, suspicious = warn)
 - `bun run format` — Prettier (single quotes, 100 cols, `arrowParens: avoid`, one JSX attribute per line)
 - `bun run typecheck` — TypeScript check (`tsconfig` is `noEmit`)
-- `bun run dist` — signed + notarized `.dmg` in `release/`. Needs a Developer ID cert in the keychain and a `notarytool` keychain profile (default name `notary`, shared with Swatch; override with `APPLE_KEYCHAIN_PROFILE`). `scripts/notarize-dmg.sh` signs/notarizes/staples the DMG after electron-builder.
+- `bun run dist` — signed + notarized `.dmg` in `release/`. Needs a Developer ID cert in the keychain and a `notarytool` keychain profile (default name `notary`, shared with Swatch; override with `APPLE_KEYCHAIN_PROFILE`). `scripts/notarize-dmg.sh` signs/notarizes/staples the DMG after electron-builder. The app icon is an Icon Composer file (`build/Pluck.icon`), so packaging needs Xcode 26+.
 
 There is no test suite.
 

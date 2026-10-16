@@ -1,15 +1,15 @@
 # Pluck
 
-A tiny menu bar utility for macOS that copies text from anywhere on your screen. Select an area with a shortcut and its text is instantly copied to your clipboard.
+A tiny menu bar utility for macOS that copies text from anywhere on your screen. Select an area with a shortcut and its text — or the contents of a QR code — is instantly copied to your clipboard.
 
-https://github.com/user-attachments/assets/31a9c210-b923-4e0f-bdfb-4cbb864b2e9d
+https://github.com/user-attachments/assets/1c354c61-fdc7-4e4b-8605-2699f013e30f
 
 ## Features
 
 - **Copy text from anywhere** — press <kbd>⇧</kbd> <kbd>⌘</kbd> <kbd>T</kbd> (configurable), select an area and its text lands in your clipboard
 - **On-device recognition** — powered by Apple Vision, works offline and detects the language automatically, including Cyrillic
 - **QR codes and barcodes** — if the selection contains one, its content is copied instead of the text around it
-- **Pluck from clipboard image** — copied an image in a browser or a chat, or an image file in Finder? Pick **Pluck from Clipboard Image** in the menu and get its text without taking a screenshot
+- **Pluck from clipboard image** — copy an image in a browser, a chat or Finder, pick **Pluck from Clipboard Image** in the menu and get its text or QR code without taking a screenshot
 - **Sound feedback** — a shutter sound when text is copied, an alert when no text is found
 - **Keep line breaks** — copy text line by line or join it into a single line
 - **Launch at login** — always ready in the menu bar, never in the Dock
@@ -25,7 +25,7 @@ Requires macOS 13 or later on Apple silicon.
 
 ## Development
 
-Requires [Bun](https://bun.sh) and Xcode (text recognition is a small Swift helper).
+Requires [Bun](https://bun.sh) and Xcode (recognition is a small Swift helper).
 
 ```sh
 bun install
@@ -65,4 +65,4 @@ Building the app icon requires Xcode 26 or later.
 
 ## Tech stack
 
-Electron, React 19, Vite, Tailwind CSS v4 and a native Swift helper built on Apple Vision's `VNRecognizeTextRequest`.
+Electron, React 19, Vite, Tailwind CSS v4 and a native Swift helper built on Apple Vision's `VNRecognizeTextRequest` and `VNDetectBarcodesRequest`.
