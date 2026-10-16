@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import type { ProgressInfo } from 'electron-updater';
 
-import { IpcChannel } from '../../shared/ipc';
+import { send } from '../ipc';
 import { loadRenderer, PRELOAD_PATH } from './load-renderer';
 
 let updateWindow: BrowserWindow | null = null;
@@ -41,7 +41,7 @@ export function openUpdateWindow(onCancel: () => void) {
 }
 
 export function sendUpdateProgress({ percent }: ProgressInfo) {
-  updateWindow?.webContents.send(IpcChannel.updateProgress, Math.floor(percent));
+  if (updateWindow) send(updateWindow.webContents, 'updater:progress', Math.floor(percent));
 }
 
 export function closeUpdateWindow() {

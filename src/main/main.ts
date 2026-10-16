@@ -1,7 +1,7 @@
 import { app, globalShortcut } from 'electron';
 
-import { setupAboutPanel } from './about-panel';
-import { setupSettingsHandlers } from './settings/ipc';
+import { setupAboutPanel } from './dialogs/about-panel';
+import { setupSettingsHandlers } from './settings-handlers';
 import { registerShortcut } from './shortcut';
 import { createTray } from './tray/tray';
 

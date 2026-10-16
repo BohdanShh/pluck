@@ -1,5 +1,5 @@
 import type { StoredSettings } from '../../shared/settings';
-import { readJsonFile, writeJsonFile } from '../lib/json-file';
+import { readJsonFile, writeJsonFile } from '../system/json-file';
 import { parseSettings } from './parse-settings';
 
 const SETTINGS_FILE = 'settings.json';

@@ -2,17 +2,19 @@ import { rm } from 'node:fs/promises';
 
 import { clipboard } from 'electron';
 
-import { captureScreen } from './lib/capture-screen';
+import { confirmOpenScreenRecordingSettings } from './dialogs/screen-recording-dialog';
 import { joinLines } from './lib/join-lines';
-import { playSound } from './lib/play-sound';
-import { recognizeText } from './lib/recognize-text';
-import {
-  hasScreenRecordingAccess,
-  requestScreenRecordingAccess,
-} from './lib/screen-recording-access';
 import { getSettings } from './settings/store';
+import { captureScreen } from './system/capture-screen';
+import { playSound } from './system/play-sound';
+import { recognizeText } from './system/recognize-text';
+import { hasScreenRecordingAccess, openScreenRecordingSettings } from './system/screen-recording';
 
 let isPlucking = false;
+
+async function requestScreenRecordingAccess() {
+  if (await confirmOpenScreenRecordingSettings()) await openScreenRecordingSettings();
+}
 
 export async function pluckText() {
   if (isPlucking) return;

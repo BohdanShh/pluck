@@ -1,8 +1,9 @@
-import { use, useState, type ChangeEvent } from 'react';
+import { use, useState } from 'react';
 
 import { SettingRow } from './components/setting-row';
 import { ShortcutRecorder } from './components/shortcut-recorder';
 import { Switch } from './components/switch';
+import { useSyncedSetting } from './hooks/use-synced-setting';
 
 const settingsPromise = window.settings.get();
 
@@ -11,8 +12,14 @@ export function Settings() {
 
   const [shortcut, setShortcut] = useState(initialSettings.pluckTextShortcut);
   const [shortcutError, setShortcutError] = useState<string | null>(null);
-  const [keepLineBreaks, setKeepLineBreaks] = useState(initialSettings.keepLineBreaks);
-  const [launchAtLogin, setLaunchAtLogin] = useState(initialSettings.launchAtLogin);
+  const [keepLineBreaks, changeKeepLineBreaks] = useSyncedSetting(
+    initialSettings.keepLineBreaks,
+    window.settings.setKeepLineBreaks
+  );
+  const [launchAtLogin, changeLaunchAtLogin] = useSyncedSetting(
+    initialSettings.launchAtLogin,
+    window.settings.setLaunchAtLogin
+  );
 
   const changeShortcut = async (accelerator: string) => {
     const error = await window.settings.setShortcut(accelerator);
@@ -20,30 +27,6 @@ export function Settings() {
     setShortcutError(error);
 
     if (!error) setShortcut(accelerator);
-  };
-
-  const changeKeepLineBreaks = async (event: ChangeEvent<HTMLInputElement>) => {
-    const keep = event.target.checked;
-
-    setKeepLineBreaks(keep);
-
-    try {
-      setKeepLineBreaks(await window.settings.setKeepLineBreaks(keep));
-    } catch {
-      setKeepLineBreaks(!keep);
-    }
-  };
-
-  const changeLaunchAtLogin = async (event: ChangeEvent<HTMLInputElement>) => {
-    const launch = event.target.checked;
-
-    setLaunchAtLogin(launch);
-
-    try {
-      setLaunchAtLogin(await window.settings.setLaunchAtLogin(launch));
-    } catch {
-      setLaunchAtLogin(!launch);
-    }
   };
 
   return (
@@ -66,7 +49,7 @@ export function Settings() {
         >
           <Switch
             checked={keepLineBreaks}
-            onChange={changeKeepLineBreaks}
+            onChange={event => changeKeepLineBreaks(event.target.checked)}
           />
         </SettingRow>
         <SettingRow
@@ -76,7 +59,7 @@ export function Settings() {
         >
           <Switch
             checked={launchAtLogin}
-            onChange={changeLaunchAtLogin}
+            onChange={event => changeLaunchAtLogin(event.target.checked)}
           />
         </SettingRow>
       </div>

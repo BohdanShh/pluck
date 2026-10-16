@@ -2,6 +2,8 @@ import { execFile } from 'node:child_process';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
+import { logError } from '../lib/log';
+
 const execFileAsync = promisify(execFile);
 
 const RECOGNIZE_TEXT_PATH = path
@@ -14,7 +16,7 @@ export async function recognizeText(imagePath: string) {
 
     return stdout.trim() || null;
   } catch (error) {
-    console.error('Failed to recognize text:', error);
+    logError('Failed to recognize text', error);
 
     return null;
   }
