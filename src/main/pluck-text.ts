@@ -31,15 +31,20 @@ export async function pluckText() {
 
     if (!imagePath) return;
 
-    const text = await recognizeText(imagePath);
+    const recognition = await recognizeText(imagePath);
     await rm(imagePath, { force: true });
 
-    if (!text) {
+    if (!recognition) {
       playSound('failure');
       return;
     }
 
-    clipboard.writeText(getSettings().keepLineBreaks ? text : joinLines(text));
+    const { kind, text } = recognition;
+
+    // Barcode payloads (vCards, Wi-Fi configs) are copied verbatim.
+    clipboard.writeText(
+      kind === 'barcode' || getSettings().keepLineBreaks ? text : joinLines(text)
+    );
     playSound('success');
   } finally {
     isPlucking = false;

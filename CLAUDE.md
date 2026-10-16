@@ -42,7 +42,9 @@ Error rule: expected outcomes (cancelled selection, missing settings file) retur
 
 ### Capture pipeline (`src/main/pluck-text.ts`)
 
-Triggered by the global shortcut or the tray menu item. Guarded against re-entry. Steps: check Screen Recording permission (if missing, confirm via `dialogs/screen-recording-dialog.ts` and open System Settings instead of capturing) → `/usr/sbin/screencapture -i -x` to a temp PNG → run the `recognize-text` Swift binary on it (prints recognized lines to stdout) → delete the PNG → write to clipboard, joining lines unless `keepLineBreaks` is set → play success/failure sound.
+Triggered by the global shortcut or the tray menu item. Guarded against re-entry. Steps: check Screen Recording permission (if missing, confirm via `dialogs/screen-recording-dialog.ts` and open System Settings instead of capturing) → `/usr/sbin/screencapture -i -x` to a temp PNG → run the `recognize-text` Swift binary on it → delete the PNG → write to clipboard → play success/failure sound.
+
+The binary runs text recognition and barcode detection in one Vision pass and prints JSON `{ kind: 'text' | 'barcode', text }`. If any barcode/QR code has a string payload, it wins over the text (multiple codes are deduped and joined top-to-bottom). Barcode payloads are copied verbatim; text is joined into one line unless `keepLineBreaks` is set.
 
 The Swift helper (`native/recognize-text.swift`) is compiled to `dist-electron/recognize-text`, located next to `main.js` via `import.meta.dirname`, and unpacked from the asar in packaged builds (`asarUnpack` in `electron-builder.json`; the path is rewritten `app.asar` → `app.asar.unpacked`). If you rename or move it, update all three places.
 

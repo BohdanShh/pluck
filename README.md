@@ -8,6 +8,7 @@ https://github.com/user-attachments/assets/31a9c210-b923-4e0f-bdfb-4cbb864b2e9d
 
 - **Copy text from anywhere** — press <kbd>⇧</kbd> <kbd>⌘</kbd> <kbd>T</kbd> (configurable), select an area and its text lands in your clipboard
 - **On-device recognition** — powered by Apple Vision, works offline and detects the language automatically, including Cyrillic
+- **QR codes and barcodes** — if the selection contains one, its content is copied instead of the text around it
 - **Sound feedback** — a shutter sound when text is copied, an alert when no text is found
 - **Keep line breaks** — copy text line by line or join it into a single line
 - **Launch at login** — always ready in the menu bar, never in the Dock
