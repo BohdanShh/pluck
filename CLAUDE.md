@@ -32,7 +32,7 @@ Three code areas under `src/`, built by `vite-plugin-electron` (see `vite.config
 ### Main process layers
 
 - `lib/` — pure helpers with no Electron or system access (`join-lines`, `validate-shortcut`, `log`)
-- `system/` — wrappers over macOS and the file system (`capture-screen`, `recognize-text`, `play-sound`, `screen-recording`, `launch-at-login`, `json-file`). No UI.
+- `system/` — wrappers over macOS and the file system (`capture-screen`, `clipboard-image`, `recognize-text`, `play-sound`, `screen-recording`, `launch-at-login`, `json-file`). No UI.
 - `dialogs/` — native message boxes and the about panel. `show-message.ts` (`showMessage`, `confirm`) focuses the app first, since it has no Dock icon.
 - `tray/`, `windows/` — the tray menu and BrowserWindows
 - `settings/` — the settings store and its validation only (data layer, imports nothing above `lib/` and `system/`)
@@ -42,7 +42,12 @@ Error rule: expected outcomes (cancelled selection, missing settings file) retur
 
 ### Capture pipeline (`src/main/pluck-text.ts`)
 
-Triggered by the global shortcut or the tray menu item. Guarded against re-entry. Steps: check Screen Recording permission (if missing, confirm via `dialogs/screen-recording-dialog.ts` and open System Settings instead of capturing) → `/usr/sbin/screencapture -i -x` to a temp PNG → run the `recognize-text` Swift binary on it → delete the PNG → write to clipboard → play success/failure sound.
+Two entry points share one re-entry guard (`withPluckGuard`) and one tail (`copyRecognizedText`: recognize → delete the temp image → write to clipboard → play sound):
+
+- `pluckText` — triggered by the global shortcut or the tray menu item. Steps: check Screen Recording permission (if missing, confirm via `dialogs/screen-recording-dialog.ts` and open System Settings instead of capturing) → `/usr/sbin/screencapture -i -x` to a temp PNG → run the `recognize-text` Swift binary on it → delete the PNG → write to clipboard → play success/failure sound.
+- `pluckClipboardImage` — tray item "Pluck from Clipboard Image", no Screen Recording needed. `system/clipboard-image.ts` saves the clipboard to a temp file: a file copied in Finder (`text/uri-list`) is copied as is if it has an image extension, otherwise `image/png` is written (Electron converts TIFF-only clipboards to it). A Finder copy of a non-image file returns `null` instead of falling back to the image, because that image is the file's icon. No image shows `dialogs/clipboard-image-dialog.ts`.
+
+Electron 44's `clipboard` is the async W3C-style API (`read()` → `ClipboardItem[]`, `writeText()` returns a promise); `readImage`/`readText` sync methods no longer exist.
 
 The binary runs text recognition and barcode detection in one Vision pass and prints JSON `{ kind: 'text' | 'barcode', text }`. If any barcode/QR code has a string payload, it wins over the text (multiple codes are deduped and joined top-to-bottom). Barcode payloads are copied verbatim; text is joined into one line unless `keepLineBreaks` is set.
 

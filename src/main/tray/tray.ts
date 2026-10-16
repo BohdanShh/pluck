@@ -1,7 +1,7 @@
 import { Tray } from 'electron';
 
 import { openAboutPanel } from '../dialogs/about-panel';
-import { pluckText } from '../pluck-text';
+import { pluckClipboardImage, pluckText } from '../pluck-text';
 import { getSettings, onSettingsChange } from '../settings/store';
 import { openSettingsWindow } from '../windows/settings-window';
 import { buildMenu } from './menu';
@@ -21,6 +21,7 @@ function updateMenu() {
     buildMenu({
       shortcut: getSettings().pluckTextShortcut,
       onPluckText: pluckText,
+      onPluckClipboardImage: pluckClipboardImage,
       onOpenSettings: openSettingsWindow,
       onOpenAbout: openAboutPanel,
       onCheckForUpdates: checkForUpdates,
