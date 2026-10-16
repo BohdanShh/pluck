@@ -15,10 +15,9 @@ https://github.com/user-attachments/assets/31a9c210-b923-4e0f-bdfb-4cbb864b2e9d
 
 ## Install
 
-1. Download the latest `Pluck-<version>-arm64.dmg` from [Releases](https://github.com/BohdanShh/pluck/releases/latest)
+1. Download the latest `Pluck-<version>-arm64.dmg` from [Releases](https://github.com/BohdanShh/pluck/releases/latest) (signed and notarized by Apple)
 2. Open it and drag **Pluck** to **Applications**
 3. Launch Pluck — it appears in the menu bar
-4. On the first capture, allow **Screen Recording** in System Settings → Privacy & Security
 
 Requires macOS 13 or later on Apple silicon.
 
