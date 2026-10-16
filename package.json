@@ -20,7 +20,8 @@
     "start": "electron .",
     "format": "prettier . --write",
     "lint": "oxlint",
-    "dist": "export APPLE_KEYCHAIN_PROFILE=${APPLE_KEYCHAIN_PROFILE:-pluck} && rm -rf release && bun run build && electron-builder && sh scripts/notarize-dmg.sh"
+    "typecheck": "tsc -p .",
+    "dist": "export APPLE_KEYCHAIN_PROFILE=${APPLE_KEYCHAIN_PROFILE:-notary} && rm -rf release && bun run build && electron-builder && sh scripts/notarize-dmg.sh"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

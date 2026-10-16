@@ -31,21 +31,22 @@ bun install
 bun run dev
 ```
 
-| Command          | Description                                           |
-| ---------------- | ----------------------------------------------------- |
-| `bun run dev`    | Start the app with hot reload                         |
-| `bun run build`  | Build the renderer, main process and Swift helper     |
-| `bun run start`  | Run the built app                                     |
-| `bun run dist`   | Package a signed and notarized `.dmg` into `release/` |
-| `bun run format` | Format the code with Prettier                         |
-| `bun run lint`   | Lint the code with Oxlint                             |
+| Command             | Description                                           |
+| ------------------- | ----------------------------------------------------- |
+| `bun run dev`       | Start the app with hot reload                         |
+| `bun run build`     | Build the renderer, main process and Swift helper     |
+| `bun run start`     | Run the built app                                     |
+| `bun run dist`      | Package a signed and notarized `.dmg` into `release/` |
+| `bun run format`    | Format the code with Prettier                         |
+| `bun run lint`      | Lint the code with Oxlint                             |
+| `bun run typecheck` | Type check the code with TypeScript                   |
 
 ### Packaging
 
 `bun run dist` signs the app and the `.dmg` with a Developer ID Application certificate from your keychain and notarizes both with Apple. Store your notarization credentials once:
 
 ```sh
-xcrun notarytool store-credentials pluck \
+xcrun notarytool store-credentials notary \
   --key ~/.private_keys/AuthKey_<KEY_ID>.p8 \
   --key-id <KEY_ID> \
   --issuer <ISSUER_ID>
